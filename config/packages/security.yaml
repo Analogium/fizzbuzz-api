@@ -1,0 +1,18 @@
+security:
+    providers:
+        # Un seul client API : pas besoin de base de données.
+        api_clients:
+            memory:
+                users:
+                    api_client: { roles: [ROLE_API] }
+
+    firewalls:
+        api:
+            pattern: ^/api
+            stateless: true # pas de session/cookie : la clé est vérifiée à chaque requête
+            provider: api_clients
+            custom_authenticators:
+                - App\Security\ApiKeyAuthenticator
+
+    access_control:
+        - { path: ^/api, roles: ROLE_API }
